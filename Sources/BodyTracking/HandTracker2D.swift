@@ -68,6 +68,9 @@ public class HandTracker2D {
     ///Normalized pixel coordinates (0,0 top-left, 1,1 bottom-right)
     public fileprivate(set) var jointAVFoundationPositions : [HandJointName : CGPoint]!
     
+    ///Confidence level for each joint
+    public fileprivate(set) var jointConfidences : [HandJointName : Float]!
+    
     public static let allHandJoints : Set<HandJointName> = [
         .thumbTip, .thumbIP, .thumbMP, .thumbCMC,
         .indexTip, .indexDIP, .indexPIP, .indexMCP,
@@ -238,6 +241,8 @@ class SampleBufferDelegate {
                         
                         let screenSpacePoint = handTracker.arView?.convertAVFoundationToScreenSpace(avPoint) ?? .zero
                         handTracker.jointScreenPositions[point.key] = screenSpacePoint
+                        
+                        handTracker.jointConfidences[point.key] = point.value.confidence
                     }
 
                     if !aboveConfidenceThreshold {
